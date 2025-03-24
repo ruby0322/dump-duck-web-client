@@ -12,7 +12,7 @@
 	"pages_build_output_dir": ".vercel/output/static",
 	"observability": {
 		"enabled": true
-	}
+	},
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -26,6 +26,20 @@
 	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
 	 */
 
+	"r2_buckets": [
+		{
+			"binding": "BKT",
+			"bucket_name": "dump-duck"
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "dump-duck",
+			"database_id": "a4b16d48-fba9-404e-bb38-4f5c9af394ff",
+			"preview_database_id": "DB"
+		}
+	]
 	/**
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables

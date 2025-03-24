@@ -19,11 +19,11 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
     switch (document.type) {
       case "text":
         return (
-          <div className="h-40 p-4 bg-muted/30 rounded-t-md overflow-hidden relative">
+          <div className="h-40 px-4 bg-muted/30 rounded-t-md overflow-hidden relative">
             <div className="absolute top-2 right-2">
               <FileText className="h-5 w-5 text-blue-500" />
             </div>
-            <p className="text-sm line-clamp-6 text-muted-foreground">{document.content || "文本内容预览"}</p>
+            <p className="text-sm line-clamp-6 text-muted-foreground">{document.content || "預覽"}</p>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent" />
           </div>
         )
@@ -53,7 +53,7 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
     <Card className="overflow-hidden shadow-none hover:shadow-md transition-shadow cursor-pointer">
       <div onClick={onClick}>{renderPreviewContent()}</div>
 
-      <CardFooter className="p-4 flex flex-col items-start gap-2">
+      <CardFooter className="px-4 flex flex-col items-start gap-2">
         <div className="flex justify-between w-full">
           <h3 className="font-medium text-sm line-clamp-1">{document.title}</h3>
           <Button
