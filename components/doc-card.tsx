@@ -10,11 +10,12 @@ import Image from "next/image"
 interface DocumentCardProps {
   document: Document
   onClick: () => void
-  onToggleFavorite: (id: string) => void
+  onToggleFavorite: (id: number) => void
 }
 
 export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCardProps) {
   // Render preview content based on document type
+  console.log('document.labels', document.labels);
   const renderPreviewContent = () => {
     switch (document.type) {
       case "text":
@@ -31,7 +32,7 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
         return (
           <div className="h-40 relative rounded-t-md overflow-hidden">
             <Image
-              src={document.url || "/placeholder.svg?height=160&width=320&text=图片预览"}
+              src={"/placeholder.svg?height=160&width=320&text=图片预览"}
               alt={document.title}
               fill
               className="object-cover"
@@ -43,7 +44,6 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
           <div className="h-40 flex flex-col items-center justify-center bg-muted/30 rounded-t-md">
             <File className="h-16 w-16 text-amber-500 mb-2" />
             <p className="text-sm font-medium">{document.filename || "document.pdf"}</p>
-            <p className="text-xs text-muted-foreground">{document.filesize || "2.4 MB"}</p>
           </div>
         )
     }
@@ -72,12 +72,12 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
         </div>
 
         <div className="flex flex-wrap gap-1 mt-1">
-          {document.labels.slice(0, 3).map((label) => (
-            <Badge key={label} variant="outline" className="text-xs px-1.5 py-0">
-              {label}
+          {document.labels?.slice(0, 3).map((label) => (
+            <Badge key={label.id} variant="outline" className="text-xs px-1.5 py-0">
+              {label.name}
             </Badge>
           ))}
-          {document.labels.length > 3 && (
+          {document.labels?.length && document.labels?.length > 3 && (
             <Badge variant="outline" className="text-xs px-1.5 py-0">
               +{document.labels.length - 3}
             </Badge>

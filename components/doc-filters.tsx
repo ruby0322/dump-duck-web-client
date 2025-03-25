@@ -12,10 +12,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Label } from "@/types/document"
 import { ArrowDownAZ, ArrowUpAZ, Filter, Star } from "lucide-react"
 
 interface DocumentFiltersProps {
-  allLabels: string[]
+  allLabels: Label[]
   selectedLabels: string[]
   setSelectedLabels: (labels: string[]) => void
   sortOrder: "asc" | "desc"
@@ -62,10 +63,10 @@ export function DocFilters({
           <DropdownMenuSeparator />
           <DropdownMenuGroup className="max-h-[300px] overflow-y-auto">
             {allLabels.map((label) => (
-              <DropdownMenuItem key={label} onSelect={(e) => e.preventDefault()}>
-                <div className="flex items-center space-x-2 w-full" onClick={() => toggleLabel(label)}>
-                  <Checkbox checked={selectedLabels.includes(label)} />
-                  <span>{label}</span>
+              <DropdownMenuItem key={label.id} onSelect={(e) => e.preventDefault()}>
+                <div className="flex items-center space-x-2 w-full" onClick={() => toggleLabel(label.name)}>
+                  <Checkbox checked={selectedLabels.includes(label.name)} />
+                  <span>{label.name}</span>
                 </div>
               </DropdownMenuItem>
             ))}

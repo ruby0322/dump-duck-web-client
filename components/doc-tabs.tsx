@@ -7,16 +7,18 @@ import { File, FileText, Image } from "lucide-react"
 
 interface DocumentTabsProps {
   documents: Document[]
+  filteredDocuments: Document[]
   activeTab: "all" | DocumentType
   setActiveTab: (tab: "all" | DocumentType) => void
   onDocumentClick: (document: Document) => void
-  onToggleFavorite: (id: string) => void
+  onToggleFavorite: (id: number) => void
 }
 
 const NOT_FOUND_TEXT = '找不到文件鴨...';
 
 export function DocTabs({
   documents,
+  filteredDocuments,
   activeTab,
   setActiveTab,
   onDocumentClick,
@@ -55,11 +57,11 @@ export function DocTabs({
       </TabsList>
 
       <TabsContent value="all" className="mt-0">
-        {documents.length === 0 ? (
+        {filteredDocuments.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">{NOT_FOUND_TEXT}</div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {documents.map((document) => (
+            {filteredDocuments.map((document) => (
               <DocumentCard
                 key={document.id}
                 document={document}
@@ -76,8 +78,7 @@ export function DocTabs({
           <div className="text-center py-12 text-muted-foreground">{NOT_FOUND_TEXT}</div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {documents
-              .filter((doc) => doc.type === "text")
+            {filteredDocuments
               .map((document) => (
                 <DocumentCard
                   key={document.id}
@@ -95,8 +96,7 @@ export function DocTabs({
           <div className="text-center py-12 text-muted-foreground">{NOT_FOUND_TEXT}</div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {documents
-              .filter((doc) => doc.type === "image")
+            {filteredDocuments
               .map((document) => (
                 <DocumentCard
                   key={document.id}
@@ -114,8 +114,7 @@ export function DocTabs({
           <div className="text-center py-12 text-muted-foreground">{NOT_FOUND_TEXT}</div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {documents
-              .filter((doc) => doc.type === "file")
+            {filteredDocuments
               .map((document) => (
                 <DocumentCard
                   key={document.id}

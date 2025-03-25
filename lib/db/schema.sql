@@ -45,23 +45,20 @@ CREATE TABLE labels (
 
 -- 创建文档标签关联表
 CREATE TABLE document_labels (
-    id SERIAL PRIMARY KEY,
     document_id INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
     label_id INTEGER NOT NULL REFERENCES labels(id) ON DELETE CASCADE,
-    UNIQUE(document_id, label_id)
+    CONSTRAINT pk PRIMARY KEY (document_id, label_id)
 );
 
 -- 创建文本内容表（仅用于文本类型文档）
 CREATE TABLE document_contents (
-    id SERIAL PRIMARY KEY,
-    document_id INTEGER NOT NULL UNIQUE REFERENCES documents(id) ON DELETE CASCADE,
+    document_id INTEGER PRIMARY KEY NOT NULL UNIQUE REFERENCES documents(id) ON DELETE CASCADE,
     content TEXT NOT NULL
 );
 
 -- 创建文件引用表（用于图片和文件类型文档）
 CREATE TABLE document_files (
-    id SERIAL PRIMARY KEY,
-    document_id INTEGER NOT NULL UNIQUE REFERENCES documents(id) ON DELETE CASCADE,
+    document_id INTEGER PRIMARY KEY NOT NULL UNIQUE REFERENCES documents(id) ON DELETE CASCADE,
     storage_path VARCHAR(255) NOT NULL,  -- 存储系统中的路径
     filename VARCHAR(255) NOT NULL,      -- 原始文件名
     file_type VARCHAR(50)               -- 文件类型
