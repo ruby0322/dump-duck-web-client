@@ -1,12 +1,11 @@
 import { Document, DocumentsResponse, Label, User } from "@/types/document";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
 export const runtime = 'edge'
 
 export async function GET(
-  req: NextApiRequest, 
+  req: Request, 
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<DocumentsResponse>> {
   const { id } = await params;

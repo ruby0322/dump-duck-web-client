@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS users;
 
 -- 创建用户表
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE users (
 
 -- 创建文档表
 CREATE TABLE documents (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     type VARCHAR(20) NOT NULL CHECK (type IN ('text', 'image', 'file')),
@@ -35,7 +35,7 @@ CREATE TABLE documents (
 
 -- 创建标签表
 CREATE TABLE labels (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(50) NOT NULL,
     color VARCHAR(20) DEFAULT '#808080',
     creator_id INTEGER NOT NULL REFERENCES users(id),

@@ -1,10 +1,10 @@
 -- 插入使用者資料
-INSERT INTO users (id, username, email, password_hash, display_name) VALUES
-(1, 'user01', 'user01@example.com', 'password_hash_01', '使用者一'),
-(2, 'user02', 'user02@example.com', 'password_hash_02', '使用者二'),
-(3, 'user03', 'user03@example.com', 'password_hash_03', '使用者三'),
-(4, 'user04', 'user04@example.com', 'password_hash_04', '使用者四'),
-(5, 'user05', 'user05@example.com', 'password_hash_05', '使用者五');
+INSERT INTO users (username, email, password_hash, display_name) VALUES
+('user01', 'user01@example.com', 'password_hash_01', '使用者一'),
+('user02', 'user02@example.com', 'password_hash_02', '使用者二'),
+('user03', 'user03@example.com', 'password_hash_03', '使用者三'),
+('user04', 'user04@example.com', 'password_hash_04', '使用者四'),
+('user05', 'user05@example.com', 'password_hash_05', '使用者五');
 
 -- 插入使用者 1 的標籤資料
 INSERT INTO labels (id, name, color, creator_id) VALUES
@@ -47,37 +47,37 @@ INSERT INTO labels (id, name, color, creator_id) VALUES
 (25, '演示', '#8a2be2', 5);
 
 -- 插入文件資料
-INSERT INTO documents (id, title, description, type, creator_id, favorite) VALUES
+INSERT INTO documents (title, description, type, creator_id, favorite) VALUES
 -- 使用者一的文件
-(1, '會議記錄', '這是 2024 年 1 月的會議記錄', 'text', 1, TRUE),
-(2, '業務報告', '關於本季度的業務報告', 'text', 1, FALSE),
-(3, '公司簡介', '我們公司的背景介紹文件', 'file', 1, FALSE),
-(4, '設計提案', 'UI 設計提案文檔', 'text', 1, TRUE),
-(5, '財務報表', '2024 年的財務數據報告', 'text', 1, TRUE),
+('會議記錄', '這是 2024 年 1 月的會議記錄', 'text', 1, TRUE),
+('業務報告', '關於本季度的業務報告', 'text', 1, FALSE),
+('公司簡介', '我們公司的背景介紹文件', 'file', 1, FALSE),
+('設計提案', 'UI 設計提案文檔', 'text', 1, TRUE),
+('財務報表', '2024 年的財務數據報告', 'text', 1, TRUE),
 -- 使用者二的文件
-(6, '學習筆記', '這是我學習資料庫的筆記', 'text', 2, FALSE),
-(7, '專案計劃書', '專案的計劃書和時間表', 'text', 2, TRUE),
-(8, '照片集', '一些攝影作品的照片集', 'image', 2, TRUE),
-(9, '求職簡歷', '我的最新求職簡歷', 'file', 2, FALSE),
-(10, '學術文章', '這篇文章探討資料結構的理論', 'text', 2, TRUE),
+('學習筆記', '這是我學習資料庫的筆記', 'text', 2, FALSE),
+('專案計劃書', '專案的計劃書和時間表', 'text', 2, TRUE),
+('照片集', '一些攝影作品的照片集', 'image', 2, TRUE),
+('求職簡歷', '我的最新求職簡歷', 'file', 2, FALSE),
+('學術文章', '這篇文章探討資料結構的理論', 'text', 2, TRUE),
 -- 使用者三的文件
-(11, '設計稿', '設計草圖和原型圖', 'image', 3, FALSE),
-(12, '開發手冊', '程式開發的指南手冊', 'file', 3, TRUE),
-(13, '新聞稿', '公司新聞和公告', 'text', 3, FALSE),
-(14, '培訓課程', '線上學習平台的培訓課程', 'text', 3, TRUE),
-(15, '產品目錄', '最新產品的介紹', 'file', 3, TRUE),
+('設計稿', '設計草圖和原型圖', 'image', 3, FALSE),
+('開發手冊', '程式開發的指南手冊', 'file', 3, TRUE),
+('新聞稿', '公司新聞和公告', 'text', 3, FALSE),
+('培訓課程', '線上學習平台的培訓課程', 'text', 3, TRUE),
+('產品目錄', '最新產品的介紹', 'file', 3, TRUE),
 -- 使用者四的文件
-(16, '行銷計劃', '行銷活動的詳細計劃', 'text', 4, TRUE),
-(17, '照片集', '我的旅行照片集', 'image', 4, FALSE),
-(18, '專案報告', '專案進度報告', 'text', 4, TRUE),
-(19, '合同文件', '商業合作合同文檔', 'file', 4, FALSE),
-(20, '筆記摘要', '閱讀過的書籍筆記摘要', 'text', 4, TRUE),
+('行銷計劃', '行銷活動的詳細計劃', 'text', 4, TRUE),
+('照片集', '我的旅行照片集', 'image', 4, FALSE),
+('專案報告', '專案進度報告', 'text', 4, TRUE),
+('合同文件', '商業合作合同文檔', 'file', 4, FALSE),
+('筆記摘要', '閱讀過的書籍筆記摘要', 'text', 4, TRUE),
 -- 使用者五的文件
-(21, '年度報告', '公司 2024 年的總結報告', 'text', 5, TRUE),
-(22, '會議錄音', '錄音文件，用於會議回顧', 'file', 5, FALSE),
-(23, '項目設計', '項目的設計方案文檔', 'text', 5, TRUE),
-(24, '商業計劃書', '為創業項目編寫的商業計劃書', 'text', 5, FALSE),
-(25, '演示文稿', 'PPT 演示文稿', 'file', 5, TRUE);
+('年度報告', '公司 2024 年的總結報告', 'text', 5, TRUE),
+('會議錄音', '錄音文件，用於會議回顧', 'file', 5, FALSE),
+('項目設計', '項目的設計方案文檔', 'text', 5, TRUE),
+('商業計劃書', '為創業項目編寫的商業計劃書', 'text', 5, FALSE),
+('演示文稿', 'PPT 演示文稿', 'file', 5, TRUE);
 
 -- 插入文檔內容資料（僅對文本類型的文件插入內容）
 INSERT INTO document_contents (document_id, content) VALUES
