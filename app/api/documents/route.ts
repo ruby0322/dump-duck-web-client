@@ -1,4 +1,4 @@
-import { Document, DocumentsResponse, Label, User } from "@/types/document";
+import { Document, DocumentsResponse, DocumentType, Label, User } from "@/types/document";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { NextResponse } from "next/server";
 
@@ -73,26 +73,24 @@ export async function GET(): Promise<NextResponse<DocumentsResponse>> {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<NextResponse<{ document: Document } | { error: string }>> {
   try {
     const { 
-      type, 
       title, 
       description, 
       content, 
       storage_path, 
       filename, 
-      file_type,
+      documnet_type,
       creator_id,
       labels = []  // 新增 labels 欄位，預設為空陣列
     }: { 
-      type: string; 
       title: string; 
       description: string; 
       content?: string; 
       storage_path?: string; 
       filename?: string; 
-      file_type?: string; 
+      documnet_type?: DocumentType; 
       creator_id?: number;
       labels?: string[];
     } = await request.json();
@@ -108,11 +106,11 @@ export async function POST(request: Request) {
     const docResult = await insertDoc.bind(
       title,
       description,
-      type,
+      documnet_type,
       creator_id
-    ).run();
+    ).first();
     
-    const documentId = docResult.results[0].id;
+    const documentId = docResult?.id;
     
     // 處理標籤
     for (const labelName of labels) {
@@ -157,7 +155,7 @@ export async function POST(request: Request) {
     }
 
     // 根據類型插入對應內容
-    if (type === 'text') {
+    if (documnet_type === 'text') {
       const insertContent = db.prepare(`
         INSERT INTO document_contents (document_id, content)
         VALUES (?, ?)
@@ -172,7 +170,7 @@ export async function POST(request: Request) {
         documentId,
         storage_path,
         filename,
-        file_type
+        documnet_type
       ).run();
     }
     
@@ -230,7 +228,7 @@ export async function POST(request: Request) {
         ...result,
         labels: JSON.parse(result.labels as string),
         creator: JSON.parse(result.creator as string)
-      }
+      } as Document
     });
     
   } catch (e) {

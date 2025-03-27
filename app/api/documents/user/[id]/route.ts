@@ -70,10 +70,10 @@ export async function GET(
     return NextResponse.json<DocumentsResponse>({ 
       documents: documents as Document[] 
     });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { documents: [], error: 'Internal server error' } as const, 
-      { status: 500 }
+      { documents: [], error: (e as Error).message } as const, 
+      { status: 200 }
     );
   }
 }
