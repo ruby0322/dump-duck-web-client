@@ -11,17 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
 import type { Document } from "@/types/document"
-import { Download, File, FileText, ImageIcon, Star } from "lucide-react"
+import { Download, File, FileText, ImageIcon, Star, Trash2 } from "lucide-react"
 import Image from "next/image"
 
 interface DocumentPreviewProps {
   document: Document
   onClose: () => void
   onToggleFavorite: (id: number) => void
+  onDelete: (id: number) => void
 }
 
-export function DocumentPreview({ document, onClose, onToggleFavorite }: DocumentPreviewProps) {
+export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete }: DocumentPreviewProps) {
   // Get initials from uploader name
   const getInitials = (name: string) => {
     return name[0];
@@ -39,7 +41,7 @@ export function DocumentPreview({ document, onClose, onToggleFavorite }: Documen
       case "text":
         return (
           <div className="border rounded-md p-4 bg-muted/30 max-h-[400px] overflow-y-auto">
-            <p>{document.content || "文本内容预览"}</p>
+            <p>{document.content || "文本内容預覽"}</p>
           </div>
         )
       case "image":
@@ -114,15 +116,23 @@ export function DocumentPreview({ document, onClose, onToggleFavorite }: Documen
         </div>
 
         <DialogFooter className="flex sm:justify-between gap-2">
-          <Button variant="outline" size="icon" onClick={() => onToggleFavorite(document.id)}>
-            <Star className={`h-4 w-4 ${document.favorite ? "fill-yellow-400 text-yellow-400" : ""}`} />
-          </Button>
           <div className="flex gap-2">
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
+            <Button className="cursor-pointer" variant="outline" size="icon" onClick={() => onToggleFavorite(document.id)}>
+              <Star
+                className={
+                  cn('h-4 w-4', document.favorite && "fill-yellow-400 text-yellow-400")
+                }
+              />
+            </Button>
+            <Button className="cursor-pointer" variant="outline">
+              <Download className="h-4 w-4 mr-1" />
               下載
             </Button>
-            <Button onClick={onClose}>關閉</Button>
+            <Button className="cursor-pointer" variant="destructive" onClick={() => onDelete(document.id)}>
+              <Trash2 className="h-4 w-4 mr-1" />
+              刪除
+            </Button>
+            <Button className="cursor-pointer" onClick={onClose}>關閉</Button>
           </div>
         </DialogFooter>
       </DialogContent>

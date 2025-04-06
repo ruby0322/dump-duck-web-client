@@ -1,8 +1,8 @@
-import { Document, DocumentsResponse, DocumentType, Label, User } from "@/types/document";
+import { Document, DocumentType, DocumentsResponse, Label, User } from "@/types/document";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { NextResponse } from "next/server";
 
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export async function GET(): Promise<NextResponse<DocumentsResponse>> {
   
@@ -43,31 +43,46 @@ export async function GET(): Promise<NextResponse<DocumentsResponse>> {
       LEFT JOIN labels l ON dl.label_id = l.id
       LEFT JOIN users u ON d.creator_id = u.id
       GROUP BY d.id, d.title, d.description, d.type, d.favorite, 
-               d.created_at, d.updated_at, dc.content,
-               df.storage_path, df.filename, df.file_type,
-               u.id, u.username, u.email, u.display_name, 
-               u.created_at, u.updated_at
+      d.created_at, d.updated_at, dc.content,
+      df.storage_path, df.filename, df.file_type,
+      u.id, u.username, u.email, u.display_name, 
+      u.created_at, u.updated_at
       ORDER BY d.created_at DESC
-    `);
-    
-    const results = await stmt.all();
-    
-    if (!results.results || results.results.length === 0) {
-      return NextResponse.json<DocumentsResponse>({ documents: [] });
-    }
-
-    const documents = results.results.map(doc => ({
-      ...doc,
-      labels: (doc.labels ? JSON.parse(doc.labels as string) : []) as Label[],
-      creator: JSON.parse(doc.creator as string) as User
-    }));
+      `);
+      
+      const results = await stmt.all();
+      
+      if (!results.results || results.results.length === 0) {
+        return NextResponse.json<DocumentsResponse>({ documents: [] });
+      }
+      
+      const documents = results.results.map(doc => ({
+        id: doc.id as number,
+        title: doc.title as string,
+        description: doc.description as string,
+        type: doc.type as DocumentType,
+        favorite: doc.favorite as boolean,
+        created_at: doc.created_at as string,
+        updated_at: doc.updated_at as string,
+        creator_id: doc.creator_id as number,
+        content: doc.content as string,
+        storage_path: doc.storage_path as string,
+        filename: doc.filename as string,
+        file_type: doc.file_type as string,
+        labels: (doc.labels ? JSON.parse(doc.labels as string) : []) as Label[],
+        creator: JSON.parse(doc.creator as string) as User
+      }));
+      console.log(results.results);
 
     return NextResponse.json<DocumentsResponse>({ 
-      documents: documents as Document[] 
+      documents: documents as Document[]
     });
-  } catch {
+    // return NextResponse.json<DocumentsResponse>({ 
+    //   documents: documents as Document[] 
+    // });
+  } catch (e) {
     return NextResponse.json(
-      { documents: [], error: 'Internal server error' } as const, 
+      { documents: [], error: `Internal server error: ${(e as Error).message}` } as const, 
       { status: 500 }
     );
   }
@@ -222,19 +237,29 @@ export async function POST(request: Request): Promise<NextResponse<{ document: D
         { status: 500 }
       );
     }
-    
+
     return NextResponse.json({
       document: {
-        ...result,
+        id: result.id as number,
+        title: result.title as string,
+        description: result.description as string,
+        type: result.type as DocumentType,
+        favorite: result.favorite as boolean,
+        created_at: result.created_at as string,
+        updated_at: result.updated_at as string,
+        creator_id: result.creator_id as number,
+        content: result.content as string,
+        storage_path: result.storage_path as string,
+        filename: result.filename as string,
+        file_type: result.file_type as string,
         labels: JSON.parse(result.labels as string),
         creator: JSON.parse(result.creator as string)
       } as Document
     });
     
   } catch (e) {
-    console.log(e);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: `Internal server error ${(e as Error).message}` },
       { status: 500 }
     );
   }

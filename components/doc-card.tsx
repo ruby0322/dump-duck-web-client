@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 import type { Document } from "@/types/document"
 import { File, FileText, Star } from "lucide-react"
 import Image from "next/image"
@@ -59,14 +60,14 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 -mr-1"
+            className="h-6 w-6 -mr-1 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation()
               onToggleFavorite(document.id)
             }}
           >
             <Star
-              className={`h-4 w-4 ${document.favorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
+              className={cn('h-4 w-4', document.favorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground")}
             />
           </Button>
         </div>

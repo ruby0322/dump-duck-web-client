@@ -10,7 +10,7 @@ interface DocumentTabsProps {
   filteredDocuments: Document[]
   activeTab: "all" | DocumentType
   setActiveTab: (tab: "all" | DocumentType) => void
-  onDocumentClick: (document: Document) => void
+  onDocumentClick: (id: number) => void
   onToggleFavorite: (id: number) => void
 }
 
@@ -65,7 +65,7 @@ export function DocTabs({
               <DocumentCard
                 key={document.id}
                 document={document}
-                onClick={() => onDocumentClick(document)}
+                onClick={() => onDocumentClick(document.id)}
                 onToggleFavorite={onToggleFavorite}
               />
             ))}
@@ -83,7 +83,7 @@ export function DocTabs({
                 <DocumentCard
                   key={document.id}
                   document={document}
-                  onClick={() => onDocumentClick(document)}
+                  onClick={() => onDocumentClick(document.id)}
                   onToggleFavorite={onToggleFavorite}
                 />
               ))}
@@ -101,7 +101,7 @@ export function DocTabs({
                 <DocumentCard
                   key={document.id}
                   document={document}
-                  onClick={() => onDocumentClick(document)}
+                  onClick={() => onDocumentClick(document.id)}
                   onToggleFavorite={onToggleFavorite}
                 />
               ))}
@@ -119,7 +119,7 @@ export function DocTabs({
                 <DocumentCard
                   key={document.id}
                   document={document}
-                  onClick={() => onDocumentClick(document)}
+                  onClick={() => onDocumentClick(document.id)}
                   onToggleFavorite={onToggleFavorite}
                 />
               ))}

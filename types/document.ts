@@ -11,6 +11,8 @@ export interface User {
   username: string;
   email: string;
   display_name: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Document {
@@ -20,12 +22,12 @@ export interface Document {
   type: DocumentType;
   favorite: boolean;
   created_at: string;
-  creator_id: number;
   updated_at: string;
-  content?: string;
-  storage_path?: string;
-  filename?: string;
-  file_type?: string;
+  creator_id: number;
+  content: string | null;
+  storage_path: string | null;
+  filename: string | null;
+  file_type: string | null;
   labels: Label[];
   creator: User;
 }
