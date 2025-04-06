@@ -115,15 +115,17 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
           </div>
         </div>
 
-        <DialogFooter className="flex sm:justify-between gap-2">
-          <div className="flex gap-2">
+        <DialogFooter className="flex flex-row justify-between gap-2">
+          <div className="w-full">
             <Button className="cursor-pointer" variant="outline" size="icon" onClick={() => onToggleFavorite(document.id)}>
               <Star
                 className={
                   cn('h-4 w-4', document.favorite && "fill-yellow-400 text-yellow-400")
                 }
-              />
+                />
             </Button>
+          </div>
+          <div className="flex gap-2">
             <Button className="cursor-pointer" variant="outline">
               <Download className="h-4 w-4 mr-1" />
               下載
