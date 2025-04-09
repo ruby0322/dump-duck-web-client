@@ -26,6 +26,34 @@ interface DocumentPreviewProps {
   onDelete: (id: number) => void
 }
 
+function removeMarkdown(input: string): string {
+  // 移除標題
+  input = input.replace(/^(#{1,6})\s+/g, '');
+
+  // 移除粗體和斜體
+  input = input.replace(/(\*\*|__)(.*?)\1/g, '$2'); // **粗體** 或 __粗體__
+  input = input.replace(/(\*|_)(.*?)\1/g, '$2');    // *斜體* 或 _斜體_
+
+  // 移除鏈接
+  input = input.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // [文本](鏈接)
+
+  // 移除圖片
+  input = input.replace(/!\[([^\]]*)\]\([^\)]+\)/g, '$1'); // ![圖片](鏈接)
+
+  // 移除區塊引用
+  input = input.replace(/^>\s+/gm, '');
+
+  // 移除代碼區塊
+  input = input.replace(/```[\s\S]*?```/g, ''); // 多行代碼區塊
+  input = input.replace(/`([^`]+)`/g, '$1');     // 單行代碼
+
+  // 移除水平線
+  input = input.replace(/^-{3,}|\*{3,}|_{3,}/g, '');
+
+  return input;
+}
+
+
 export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete }: DocumentPreviewProps) {
   // Get initials from uploader name
   const getInitials = (name: string) => {
@@ -38,17 +66,11 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
     return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
   }
 
-  // Add this helper function before renderPreviewContent
-  const convertUrlsToMarkdown = (text: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text?.replace(urlRegex, (url) => `[${url}](${url})`);
-  }
-
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     if (document.content) {
-      await navigator.clipboard.writeText(document.content);
+      await navigator.clipboard.writeText(removeMarkdown(document.content));
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       toast("📝 已將內容複製到剪貼簿");
@@ -65,47 +87,47 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
               <Markdown options={{
                 overrides: {
                   h1: {
-                    component: (props) => <h1 {...props} className="text-2xl font-bold"  />,
+                    component: (props) => <h1 {...props} className="text-grey-600 text-2xl font-bold"  />,
                   },
                   h2: {
-                    component: (props) => <h2 {...props} className="text-xl font-bold"  />,
+                    component: (props) => <h2 {...props} className="text-grey-600 text-xl font-bold break-all"  />,
                   },
                   h3: {
-                    component: (props) => <h3 {...props} className="text-lg font-bold"  />,
+                    component: (props) => <h3 {...props} className="text-grey-600 text-lg font-bold break-all"  />,
                   },
                   p: {
-                    component: (props) => <p {...props} className="text-base"  />,
+                    component: (props) => <p {...props} className="text-grey-500 text-base break-all"  />,
                   },
                   li: {
-                    component: (props) => <li {...props} className="text-base"  />,
+                    component: (props) => <li {...props} className="text-base break-all"  />,
                   },
                   a: {
                     component: (props) => <a {...props} target="_blank"  className="text-blue-500 break-all" />,
                   },
                   code: {
-                    component: (props) => <code {...props} className="bg-gray-100 p-1 rounded"  />,
+                    component: (props) => <code {...props} className="bg-gray-100 p-1 rounded break-all"  />,
                   },
                   blockquote: {
-                    component: (props) => <blockquote {...props} className="border-l-4 pl-4 italic"  />,
+                    component: (props) => <blockquote {...props} className="border-l-4 pl-4 italic break-all"  />,
                   },
                   img: {
                     component: (props) => <Image {...props} className="max-h-[400px] w-auto object-contain" alt='Image'  />,
                   },
                   ul: {
-                    component: (props) => <ul {...props} className="list-disc pl-5"  />,
+                    component: (props) => <ul {...props} className="list-disc pl-6 break-all"  />,
                   },
                   ol: {
-                    component: (props) => <ol {...props} className="list-decimal pl-5"  />,
+                    component: (props) => <ol {...props} className="list-decimal pl-6 break-all"  />,
                   },
                   strong: {
-                    component: (props) => <strong {...props} className="font-bold"  />,
+                    component: (props) => <strong {...props} className="font-bold break-all"  />,
                   },
                   table: {
                     component: (props) => <table {...props} className="min-w-full border-collapse border border-gray-300"  />,
                   },
                 }
               }} className="text-wrap break-all">
-                {document.content ? convertUrlsToMarkdown(document.content) : "這個文件沒有內容鴨..."}
+                {document.content ? document.content : "這個文件沒有內容鴨..."}
               </Markdown>
             </div>
             <Button
@@ -189,7 +211,7 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
             <div>
               <p className="text-sm font-medium">{document.creator.display_name}</p>
               <p className="text-xs text-muted-foreground">上傳於 {formatDate(document.created_at)}</p>
-            </div>
+            </div>  
           </div>
         </div>
 
