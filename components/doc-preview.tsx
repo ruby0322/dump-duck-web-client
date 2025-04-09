@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 import type { Document } from "@/types/document"
-import { Download, File, FileText, ImageIcon, Star, Trash2 } from "lucide-react"
+import { Check, Copy, Download, File, FileText, ImageIcon, Star, Trash2 } from "lucide-react"
 import Markdown from 'markdown-to-jsx'
 import Image from "next/image"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface DocumentPreviewProps {
   document: Document
@@ -36,55 +38,88 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
     return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
   }
 
+  // Add this helper function before renderPreviewContent
+  const convertUrlsToMarkdown = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text?.replace(urlRegex, (url) => `[${url}](${url})`);
+  }
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (document.content) {
+      await navigator.clipboard.writeText(document.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast("📝 已將內容複製到剪貼簿");
+    }
+  };
+
   // Render preview content based on document type
   const renderPreviewContent = () => {
     switch (document.type) {
       case "text":
         return (
-          <div className="border rounded-md p-4 bg-muted/30 max-h-[375px] overflow-y-auto">
-            <Markdown options={{
-              overrides: {
-                h1: {
-                  component: (props) => <h1 {...props} className="text-2xl font-bold"  />,
-                },
-                h2: {
-                  component: (props) => <h2 {...props} className="text-xl font-bold"  />,
-                },
-                h3: {
-                  component: (props) => <h3 {...props} className="text-lg font-bold"  />,
-                },
-                p: {
-                  component: (props) => <p {...props} className="text-base"  />,
-                },
-                li: {
-                  component: (props) => <li {...props} className="text-base"  />,
-                },
-                a: {
-                  component: (props) => <a {...props} target="_blank"  className="text-blue-500" />,
-                },
-                code: {
-                  component: (props) => <code {...props} className="bg-gray-100 p-1 rounded"  />,
-                },
-                blockquote: {
-                  component: (props) => <blockquote {...props} className="border-l-4 pl-4 italic"  />,
-                },
-                img: {
-                  component: (props) => <Image {...props} className="max-h-[400px] w-auto object-contain" alt='Image'  />,
-                },
-                ul: {
-                  component: (props) => <ul {...props} className="list-disc pl-5"  />,
-                },
-                ol: {
-                  component: (props) => <ol {...props} className="list-decimal pl-5"  />,
-                },
-                strong: {
-                  component: (props) => <strong {...props} className="font-bold"  />,
-                },
-                table: {
-                  component: (props) => <table {...props} className="min-w-full border-collapse border border-gray-300"  />,
-                },
-              }
-            }} className="text-wrap break-all">{document.content || "這個文件沒有內容鴨..."}</Markdown>
+          <div className="border rounded-md p-4 bg-muted/30 relative">
+            <div className="max-h-[375px] overflow-y-auto">
+              <Markdown options={{
+                overrides: {
+                  h1: {
+                    component: (props) => <h1 {...props} className="text-2xl font-bold"  />,
+                  },
+                  h2: {
+                    component: (props) => <h2 {...props} className="text-xl font-bold"  />,
+                  },
+                  h3: {
+                    component: (props) => <h3 {...props} className="text-lg font-bold"  />,
+                  },
+                  p: {
+                    component: (props) => <p {...props} className="text-base"  />,
+                  },
+                  li: {
+                    component: (props) => <li {...props} className="text-base"  />,
+                  },
+                  a: {
+                    component: (props) => <a {...props} target="_blank"  className="text-blue-500 break-all" />,
+                  },
+                  code: {
+                    component: (props) => <code {...props} className="bg-gray-100 p-1 rounded"  />,
+                  },
+                  blockquote: {
+                    component: (props) => <blockquote {...props} className="border-l-4 pl-4 italic"  />,
+                  },
+                  img: {
+                    component: (props) => <Image {...props} className="max-h-[400px] w-auto object-contain" alt='Image'  />,
+                  },
+                  ul: {
+                    component: (props) => <ul {...props} className="list-disc pl-5"  />,
+                  },
+                  ol: {
+                    component: (props) => <ol {...props} className="list-decimal pl-5"  />,
+                  },
+                  strong: {
+                    component: (props) => <strong {...props} className="font-bold"  />,
+                  },
+                  table: {
+                    component: (props) => <table {...props} className="min-w-full border-collapse border border-gray-300"  />,
+                  },
+                }
+              }} className="text-wrap break-all">
+                {document.content ? convertUrlsToMarkdown(document.content) : "這個文件沒有內容鴨..."}
+              </Markdown>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="backdrop-invert-5 hover:bg-transparent cursor-pointer absolute bottom-2 right-2"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <Check className="text-green-500 text-bold h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
           </div>
         )
       case "image":
@@ -136,7 +171,7 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
           <DialogDescription>{document.description}</DialogDescription>
         </DialogHeader>
 
-        <div className="py-4">{renderPreviewContent()}</div>
+        <div className="py-0">{renderPreviewContent()}</div>
 
         <div className="flex flex-wrap gap-2 mb-4">
           {document.labels?.map((label) => (

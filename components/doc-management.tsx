@@ -7,6 +7,7 @@ import { DocTabs } from "@/components/doc-tabs"
 import type { Document, DocumentType } from "@/types/document"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 export function DocManagement() {
@@ -24,13 +25,23 @@ export function DocManagement() {
 
   const allLabels = Array.from(new Set(documents.flatMap((doc) => doc.labels))).sort()
 
-  const toggleFavorite = (id: number) => {
+  const toggleFavorite = async (id: number) => {
     const updatedDocs = documents.map((doc) => (doc.id === id ? { ...doc, favorite: !doc.favorite } : doc))
     const updatedFilteredDocs = filteredDocuments.map((doc) => (doc.id === id ? { ...doc, favorite: !doc.favorite } : doc))
     setDocuments(updatedDocs);
     setFilteredDocuments(updatedFilteredDocs);
 
-    axios.post(`/api/documents/${id}/favorite`, { user_id: userId });
+    const doc = updatedDocs.find((doc) => doc.id === id);
+    const res = await axios.post(`/api/documents/${id}/favorite`, { user_id: userId });
+    if (res.status === 200) {
+      if (doc?.favorite) {
+        toast("💖 小鴨已經收藏這個文件了！");
+      } else {
+        toast("💔 總有一天你會明白，愛從來不是永恆。");
+      }
+    } else {
+      toast.error("收藏失敗，請稍後再試");
+    }
   }
 
   useEffect(() => {
@@ -96,6 +107,7 @@ export function DocManagement() {
         setDocuments(documents.filter(doc => doc.id !== id));
         setFilteredDocuments(filteredDocuments.filter(doc => doc.id !== id));
         setPreviewDocumentId(null);
+        toast("🗑️ 已經刪除的文件就像是從未存在過");
       }
     } catch (error) {
       console.error("Error deleting document:", error);

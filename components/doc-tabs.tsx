@@ -11,7 +11,7 @@ interface DocumentTabsProps {
   activeTab: "all" | DocumentType
   setActiveTab: (tab: "all" | DocumentType) => void
   onDocumentClick: (id: number) => void
-  onToggleFavorite: (id: number) => void
+  onToggleFavorite: (id: number) => Promise<void>
 }
 
 const NOT_FOUND_TEXT = '找不到文件鴨...';
