@@ -87,45 +87,82 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
               <Markdown options={{
                 overrides: {
                   h1: {
-                    component: (props) => <h1 {...props} className="text-grey-600 text-2xl font-bold"  />,
+                    component: (props) => <h1 {...props} className="text-gray-800 text-3xl font-semibold mb-6 mt-8 leading-tight" />,
                   },
                   h2: {
-                    component: (props) => <h2 {...props} className="text-grey-600 text-xl font-bold break-all"  />,
+                    component: (props) => <h2 {...props} className="text-gray-800 text-2xl font-semibold mb-4 mt-8 leading-tight" />,
                   },
                   h3: {
-                    component: (props) => <h3 {...props} className="text-grey-600 text-lg font-bold break-all"  />,
+                    component: (props) => <h3 {...props} className="text-gray-800 text-xl font-semibold mb-3 mt-6 leading-tight" />,
                   },
                   p: {
-                    component: (props) => <p {...props} className="text-grey-500 text-base break-all"  />,
+                    component: (props) => <p {...props} className="text-gray-700 text-base leading-relaxed mb-4" />,
                   },
                   li: {
-                    component: (props) => <li {...props} className="text-base break-all"  />,
+                    component: (props) => <li {...props} className="text-gray-700 text-base leading-relaxed mb-1" />,
                   },
                   a: {
-                    component: (props) => <a {...props} target="_blank"  className="text-blue-500 break-all" />,
+                    component: (props) => (
+                      <a
+                        {...props}
+                        target="_blank"
+                        className="text-sky-600 hover:text-sky-800 transition-colors duration-200 border-b border-sky-200 hover:border-sky-600"
+                      />
+                    ),
                   },
                   code: {
-                    component: (props) => <code {...props} className="bg-gray-100 p-1 rounded break-all"  />,
+                    component: (props) => (
+                      <code {...props} className="bg-gray-50 text-gray-800 px-1.5 py-0.5 rounded font-mono text-sm" />
+                    ),
                   },
                   blockquote: {
-                    component: (props) => <blockquote {...props} className="border-l-4 pl-4 italic break-all"  />,
+                    component: (props) => (
+                      <blockquote {...props} className="border-l-4 border-gray-200 pl-4 py-1 my-4 text-gray-600 italic" />
+                    ),
                   },
                   img: {
-                    component: (props) => <Image {...props} className="max-h-[400px] w-auto object-contain" alt='Image'  />,
+                    component: (props) => (
+                      <Image
+                        {...props}
+                        className="w-full max-w-80 object-contain self-center"
+                        alt={props.alt || "Image"}
+                        width={1200}
+                        height={1200}
+                      />
+                    ),
                   },
                   ul: {
-                    component: (props) => <ul {...props} className="list-disc pl-6 break-all"  />,
+                    component: (props) => <ul {...props} className="list-disc pl-6 mb-4 space-y-1" />,
                   },
                   ol: {
-                    component: (props) => <ol {...props} className="list-decimal pl-6 break-all"  />,
+                    component: (props) => <ol {...props} className="list-decimal pl-6 mb-4 space-y-1" />,
                   },
                   strong: {
-                    component: (props) => <strong {...props} className="font-bold break-all"  />,
+                    component: (props) => <strong {...props} className="font-semibold text-gray-900" />,
                   },
                   table: {
-                    component: (props) => <table {...props} className="min-w-full border-collapse border border-gray-300"  />,
+                    component: (props) => (
+                      <div className="overflow-x-auto my-6">
+                        <table {...props} className="min-w-full border-collapse border border-gray-200 rounded-sm" />
+                      </div>
+                    ),
                   },
-                }
+                  // Adding additional table-related elements for completeness
+                  th: {
+                    component: (props) => (
+                      <th
+                        {...props}
+                        className="bg-gray-50 border border-gray-200 px-4 py-2 text-left text-sm font-semibold text-gray-700"
+                      />
+                    ),
+                  },
+                  td: {
+                    component: (props) => <td {...props} className="border border-gray-200 px-4 py-2 text-sm text-gray-700" />,
+                  },
+                  hr: {
+                    component: (props) => <hr {...props} className="my-8 border-t border-gray-200" />,
+                  },
+                },
               }} className="text-wrap break-all">
                 {document.content ? document.content : "這個文件沒有內容鴨..."}
               </Markdown>
@@ -240,5 +277,5 @@ export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete 
       </DialogContent>
     </Dialog>
   )
-}
+};
 
