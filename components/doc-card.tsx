@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { cn, removeMarkdown } from "@/lib/utils"
 import type { Document } from "@/types/document"
 import { File, FileText, Star } from "lucide-react"
 import Image from "next/image"
@@ -25,7 +25,7 @@ export function DocumentCard({ document, onClick, onToggleFavorite }: DocumentCa
             <div className="absolute top-2 right-2">
               <FileText className="h-5 w-5 text-blue-500" />
             </div>
-            <p className="text-sm line-clamp-6 text-muted-foreground">{document.content || "預覽"}</p>
+            <p className="text-sm line-clamp-6 text-muted-foreground">{removeMarkdown(document.content as string) || "預覽"}</p>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent" />
           </div>
         )

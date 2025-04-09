@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
+import { cn, removeMarkdown } from "@/lib/utils"
 import type { Document } from "@/types/document"
 import { Check, Copy, Download, File, FileText, ImageIcon, Star, Trash2 } from "lucide-react"
 import Markdown from 'markdown-to-jsx'
@@ -26,32 +26,7 @@ interface DocumentPreviewProps {
   onDelete: (id: number) => void
 }
 
-function removeMarkdown(input: string): string {
-  // 移除標題
-  input = input.replace(/^(#{1,6})\s+/g, '');
 
-  // 移除粗體和斜體
-  input = input.replace(/(\*\*|__)(.*?)\1/g, '$2'); // **粗體** 或 __粗體__
-  input = input.replace(/(\*|_)(.*?)\1/g, '$2');    // *斜體* 或 _斜體_
-
-  // 移除鏈接
-  input = input.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // [文本](鏈接)
-
-  // 移除圖片
-  input = input.replace(/!\[([^\]]*)\]\([^\)]+\)/g, '$1'); // ![圖片](鏈接)
-
-  // 移除區塊引用
-  input = input.replace(/^>\s+/gm, '');
-
-  // 移除代碼區塊
-  input = input.replace(/```[\s\S]*?```/g, ''); // 多行代碼區塊
-  input = input.replace(/`([^`]+)`/g, '$1');     // 單行代碼
-
-  // 移除水平線
-  input = input.replace(/^-{3,}|\*{3,}|_{3,}/g, '');
-
-  return input;
-}
 
 
 export function DocumentPreview({ document, onClose, onToggleFavorite, onDelete }: DocumentPreviewProps) {
